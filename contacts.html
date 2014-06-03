@@ -1,0 +1,50 @@
+<head>
+
+    <!-- The template named "main" automatically renders into the document body -->
+    <script type="text/spacebars" name="main">
+<p><b>Contacts</b> <button id="toggle-order">{{order}}</button></p>
+ {{#each contacts}}
+   <div>{{.}}</div>
+ {{/each}}
+
+ <form>
+   <input type="text" id="new-contact">
+   <input type="submit" value="Add">
+ </form>
+  </script>
+
+    <script src="http://meteor.github.io/blaze/blaze-0.1.js"></script>
+
+    <script>
+        var names = Blaze.Var(["Carl Friedrich Gauss", "Marie Curie",
+            "Grace Hopper", "Claude Shannon",
+            "Ada Lovelace", "Nikola Tesla" ]);
+
+        var ascending = Blaze.Var(true);
+        var sorted = function (arr) {
+            var cloned = arr.slice(0);
+            cloned.sort(); // sort in-place
+            if (!ascending.get())
+                cloned.reverse(); // reverse in-place
+            return cloned;
+        };
+
+        Template.main.helpers({
+            order: function () { return ascending.get() ? 'A to Z' : 'Z to A'; },
+            contacts: function () { return sorted(names.get()); }
+        });
+
+        Template.main.events({
+            'click #toggle-order': function () { ascending.set(! ascending.get()); },
+            'submit form': function (evt, tmpl) {
+                var allNames = names.get();
+                // grab the new contact name from the DOM and clear the input field.
+                var newName = tmpl.find('#new-contact').value;
+                tmpl.find('#new-contact').value = '';
+                names.set(allNames.concat([newName])); // update the data model
+                return false; // don't try to submit a form
+            }
+        });
+    </script>
+
+</head>
