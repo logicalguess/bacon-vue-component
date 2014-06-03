@@ -79,7 +79,6 @@ Modified example from: http://codepen.io/imslavko/pen/KhAyp .
                 },
                 addName: function (newName) {
                     var allNames = model.get().names;
-                    console.log("NEW NAME", newName);
                     model.lens("names").set(allNames.concat([newName])); // update the data model
                 }
             }
